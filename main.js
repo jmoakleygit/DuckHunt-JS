@@ -6,4 +6,17 @@ document.addEventListener('DOMContentLoaded', function() {
     spritesheet: 'sprites.json'
   }).load();
 
+  window.__vafmhGame = game;
+
 }, false);
+
+document.addEventListener('vafmh_game_over', function(e) {
+  try {
+    window.parent.postMessage({
+      type: 'VAFMH_GAME_OVER',
+      game: 'duck-hunt',
+      score: e.detail.score,
+      accuracy: e.detail.accuracy
+    }, '*');
+  } catch(err) {}
+});

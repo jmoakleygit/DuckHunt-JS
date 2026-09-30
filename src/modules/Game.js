@@ -408,14 +408,10 @@ class Game {
     const accuracy = totalDucks > 0
       ? Math.round((this.ducksShot / totalDucks) * 100)
       : 0;
-    if (window.parent !== window) {
-      window.parent.postMessage({
-        type: 'VAFMH_GAME_OVER',
-        game: 'duck-hunt',
-        score: this.score,
-        accuracy: accuracy
-      }, '*');
-    }
+    const score = this.score;
+    document.dispatchEvent(new CustomEvent('vafmh_game_over', {
+      detail: { score: score, accuracy: accuracy }
+    }));
   }
 
   getScoreMessage() {
