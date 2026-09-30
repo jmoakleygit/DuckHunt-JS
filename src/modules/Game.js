@@ -17,12 +17,6 @@ const BOTTOM_LINK_STYLE = {
 };
 
 class Game {
-  /**
-   * Game Constructor
-   * @param opts
-   * @param {String} opts.spritesheet Path to the spritesheet file that PIXI's loader should load
-   * @returns {Game}
-   */
   constructor(opts) {
     this.spritesheet = opts.spritesheet;
     this.levelIndex = 0;
@@ -31,7 +25,6 @@ class Game {
     this.muted = false;
     this.paused = false;
     this.activeSounds = [];
-
     this.waveEnding = false;
     this.quackingSoundId = null;
     this.levels = levels.normal;
@@ -44,9 +37,7 @@ class Game {
 
   set ducksMissed(val) {
     this.ducksMissedVal = val;
-
     if (this.stage && this.stage.hud) {
-
       if (!Object.prototype.hasOwnProperty.call(this.stage.hud,'ducksMissed')) {
         this.stage.hud.createTextureBasedCounter('ducksMissed', {
           texture: 'hud/score-live/0.png',
@@ -56,7 +47,6 @@ class Game {
           max: 20
         });
       }
-
       this.stage.hud.ducksMissed = val;
     }
   }
@@ -67,9 +57,7 @@ class Game {
 
   set ducksShot(val) {
     this.ducksShotVal = val;
-
     if (this.stage && this.stage.hud) {
-
       if (!Object.prototype.hasOwnProperty.call(this.stage.hud,'ducksShot')) {
         this.stage.hud.createTextureBasedCounter('ducksShot', {
           texture: 'hud/score-dead/0.png',
@@ -79,30 +67,17 @@ class Game {
           max: 20
         });
       }
-
       this.stage.hud.ducksShot = val;
     }
   }
-  /**
-   * bullets - getter
-   * @returns {Number}
-   */
+
   get bullets() {
     return this.bulletVal ? this.bulletVal : 0;
   }
 
-  /**
-   * bullets - setter
-   * Setter for the bullets property of the game. Also in charge of updating the HUD. In the event
-   * the HUD doesn't know about displaying bullets, the property and a corresponding texture container
-   * will be created in HUD.
-   * @param {Number} val Number of bullets
-   */
   set bullets(val) {
     this.bulletVal = val;
-
     if (this.stage && this.stage.hud) {
-
       if (!Object.prototype.hasOwnProperty.call(this.stage.hud,'bullets')) {
         this.stage.hud.createTextureBasedCounter('bullets', {
           texture: 'hud/bullet/0.png',
@@ -112,32 +87,17 @@ class Game {
           rowMax: 20
         });
       }
-
       this.stage.hud.bullets = val;
     }
-
   }
 
-  /**
-   * score - getter
-   * @returns {Number}
-   */
   get score() {
     return this.scoreVal ? this.scoreVal : 0;
   }
 
-  /**
-   * score - setter
-   * Setter for the score property of the game. Also in charge of updating the HUD. In the event
-   * the HUD doesn't know about displaying the score, the property and a corresponding text box
-   * will be created in HUD.
-   * @param {Number} val Score value to set
-   */
   set score(val) {
     this.scoreVal = val;
-
     if (this.stage && this.stage.hud) {
-
       if (!Object.prototype.hasOwnProperty.call(this.stage.hud,'score')) {
         this.stage.hud.createTextBox('score', {
           style: {
@@ -153,32 +113,17 @@ class Game {
           }
         });
       }
-
       this.stage.hud.score = val;
     }
-
   }
 
-  /**
-   * wave - get
-   * @returns {Number}
-   */
   get wave() {
     return this.waveVal ? this.waveVal : 0;
   }
 
-  /**
-   * wave - set
-   * Setter for the wave property of the game. Also in charge of updating the HUD. In the event
-   * the HUD doesn't know about displaying the wave, the property and a corresponding text box
-   * will be created in the HUD.
-   * @param {Number} val
-   */
   set wave(val) {
     this.waveVal = val;
-
     if (this.stage && this.stage.hud) {
-
       if (!Object.prototype.hasOwnProperty.call(this.stage.hud,'waveStatus')) {
         this.stage.hud.createTextBox('waveStatus', {
           style: {
@@ -194,7 +139,6 @@ class Game {
           }
         });
       }
-
       if (!isNaN(val) && val > 0) {
         this.stage.hud.waveStatus = 'wave ' + val + ' of ' + this.level.waves;
       } else {
@@ -203,23 +147,13 @@ class Game {
     }
   }
 
-  /**
-   * gameStatus - get
-   * @returns {String}
-   */
   get gameStatus() {
     return this.gameStatusVal ? this.gameStatusVal : '';
   }
 
-  /**
-   * gameStatus - set
-   * @param {String} val
-   */
   set gameStatus(val) {
     this.gameStatusVal = val;
-
     if (this.stage && this.stage.hud) {
-
       if (!Object.prototype.hasOwnProperty.call(this.stage.hud,'gameStatus')) {
         this.stage.hud.createTextBox('gameStatus', {
           style: {
@@ -231,7 +165,6 @@ class Game {
           location: Stage.gameStatusBoxLocation()
         });
       }
-
       this.stage.hud.gameStatus = val;
     }
   }
@@ -248,11 +181,9 @@ class Game {
 
   onLoad() {
     document.body.appendChild(this.renderer.canvas);
-
     this.stage = new Stage({
       spritesheet: this.spritesheet
     });
-
     this.scaleToWindow();
     this.addLinkToLevelCreator();
     this.addPauseLink();
@@ -261,28 +192,22 @@ class Game {
     this.bindEvents();
     this.startLevel();
     this.animate();
-
   }
 
   addFullscreenLink() {
     this.stage.hud.createTextBox('fullscreenLink', {
       style: BOTTOM_LINK_STYLE,
       location: Stage.fullscreenLinkBoxLocation(),
-      anchor: {
-        x: 1,
-        y: 1
-      }
+      anchor: { x: 1, y: 1 }
     });
     this.stage.hud.fullscreenLink = 'fullscreen (f)';
   }
+
   addMuteLink() {
     this.stage.hud.createTextBox('muteLink', {
       style: BOTTOM_LINK_STYLE,
       location: Stage.muteLinkBoxLocation(),
-      anchor: {
-        x: 1,
-        y: 1
-      }
+      anchor: { x: 1, y: 1 }
     });
     this.stage.hud.muteLink = 'mute (m)';
   }
@@ -291,10 +216,7 @@ class Game {
     this.stage.hud.createTextBox('pauseLink', {
       style: BOTTOM_LINK_STYLE,
       location: Stage.pauseLinkBoxLocation(),
-      anchor: {
-        x: 1,
-        y: 1
-      }
+      anchor: { x: 1, y: 1 }
     });
     this.stage.hud.pauseLink = 'pause (p)';
   }
@@ -303,37 +225,21 @@ class Game {
     this.stage.hud.createTextBox('levelCreatorLink', {
       style: BOTTOM_LINK_STYLE,
       location: Stage.levelCreatorLinkBoxLocation(),
-      anchor: {
-        x: 1,
-        y: 1
-      }
+      anchor: { x: 1, y: 1 }
     });
     this.stage.hud.levelCreatorLink = 'level creator (c)';
   }
 
   bindEvents() {
     window.addEventListener('resize', this.scaleToWindow.bind(this));
-
     this.renderer.canvas.addEventListener('pointerdown', this.handleClick.bind(this));
 
     document.addEventListener('keypress', (event) => {
       event.stopImmediatePropagation();
-
-      if (event.key === 'p') {
-        this.pause();
-      }
-
-      if (event.key === 'm') {
-        this.mute();
-      }
-
-      if (event.key === 'c') {
-        this.openLevelCreator();
-      }
-
-      if (event.key === 'f') {
-        this.fullscreen();
-      }
+      if (event.key === 'p') { this.pause(); }
+      if (event.key === 'm') { this.mute(); }
+      if (event.key === 'c') { this.openLevelCreator(); }
+      if (event.key === 'f') { this.fullscreen(); }
     });
 
     document.addEventListener('fullscreenchange', () => {
@@ -360,22 +266,16 @@ class Game {
 
   pause() {
     this.stage.hud.pauseLink = this.paused ? 'pause (p)' : 'unpause (p)';
-    // SetTimeout, woof. Thing is here we need to leave enough animation frames for the HUD status to be updated
-    // before pausing all rendering, otherwise the text update we need above won't be shown to the user.
     setTimeout(() => {
       this.paused = !this.paused;
       if (this.paused) {
         this.pauseStartTime = Date.now();
         this.stage.pause();
-        this.activeSounds.forEach((soundId) => {
-          sound.pause(soundId);
-        });
+        this.activeSounds.forEach((soundId) => { sound.pause(soundId); });
       } else {
         this.timePaused += (Date.now() - this.pauseStartTime) / 1000;
         this.stage.resume();
-        this.activeSounds.forEach((soundId) => {
-          sound.play(soundId);
-        });
+        this.activeSounds.forEach((soundId) => { sound.play(soundId); });
       }
     }, 40);
   }
@@ -404,12 +304,10 @@ class Game {
     } else {
       this.level = this.levels[this.levelIndex];
     }
-
     this.maxScore += this.level.waves * this.level.ducks * this.level.pointsPerDuck;
     this.ducksShot = 0;
     this.ducksMissed = 0;
     this.wave = 0;
-
     this.gameStatus = this.level.title;
     this.stage.preLevelAnimation().then(() => {
       this.gameStatus = '';
@@ -424,7 +322,6 @@ class Game {
     this.bullets = this.level.bullets;
     this.ducksShotThisWave = 0;
     this.waveEnding = false;
-
     this.stage.addDucks(this.level.ducks, this.level.speed);
   }
 
@@ -452,11 +349,9 @@ class Game {
   }
 
   shouldWaveEnd() {
-    // evaluate pre-requisites for a wave to end
     if (this.wave === 0 || this.waveEnding || this.stage.dogActive()) {
       return false;
     }
-
     return this.isWaveTimeUp() || (this.outOfAmmo() && this.stage.ducksAlive()) || !this.stage.ducksActive();
   }
 
@@ -496,43 +391,42 @@ class Game {
     sound.play('champ');
     this.gameStatus = 'You Win!';
     this.showReplay(this.getScoreMessage());
+    this.reportScoreToVAFMH();
   }
 
   loss() {
     sound.play('loserSound');
     this.gameStatus = 'You Lose!';
     this.showReplay(this.getScoreMessage());
+    this.reportScoreToVAFMH();
+  }
+
+  reportScoreToVAFMH() {
+    const totalDucks = this.levels.reduce((acc, level) => {
+      return acc + (level.waves * level.ducks);
+    }, 0);
+    const accuracy = totalDucks > 0
+      ? Math.round((this.ducksShot / totalDucks) * 100)
+      : 0;
+    if (window.parent !== window) {
+      window.parent.postMessage({
+        type: 'VAFMH_GAME_OVER',
+        game: 'duck-hunt',
+        score: this.score,
+        accuracy: accuracy
+      }, '*');
+    }
   }
 
   getScoreMessage() {
     let scoreMessage;
-
     const percentage = (this.score / this.maxScore) * 100;
-
-    if (percentage === 100) {
-      scoreMessage = 'Flawless victory.';
-    }
-
-    if (percentage < 100) {
-      scoreMessage = 'Close to perfection.';
-    }
-
-    if (percentage <= 95) {
-      scoreMessage = 'Truly impressive score.';
-    }
-
-    if (percentage <= 85) {
-      scoreMessage = 'Solid score.';
-    }
-
-    if (percentage <= 75) {
-      scoreMessage = 'Participation award.';
-    }
-
-    if (percentage <= 63) {
-      scoreMessage = 'Yikes.';
-    }
-
+    if (percentage === 100) { scoreMessage = 'Flawless victory.'; }
+    if (percentage < 100) { scoreMessage = 'Close to perfection.'; }
+    if (percentage <= 95) { scoreMessage = 'Truly impressive score.'; }
+    if (percentage <= 85) { scoreMessage = 'Solid score.'; }
+    if (percentage <= 75) { scoreMessage = 'Participation award.'; }
+    if (percentage <= 63) { scoreMessage = 'Yikes.'; }
     return scoreMessage;
   }
 
@@ -544,10 +438,7 @@ class Game {
   }
 
   openLevelCreator() {
-    // If they didn't pause the game, pause it for them
-    if (!this.paused) {
-      this.pause();
-    }
+    if (!this.paused) { this.pause(); }
     window.open('/creator.html', '_blank');
   }
 
@@ -557,25 +448,10 @@ class Game {
       y: event.clientY
     };
 
-    if (this.stage.clickedPauseLink(clickPoint)) {
-      this.pause();
-      return;
-    }
-
-    if (this.stage.clickedMuteLink(clickPoint)) {
-      this.mute();
-      return;
-    }
-
-    if (this.stage.clickedFullscreenLink(clickPoint)) {
-      this.fullscreen();
-      return;
-    }
-
-    if (this.stage.clickedLevelCreatorLink(clickPoint)) {
-      this.openLevelCreator();
-      return;
-    }
+    if (this.stage.clickedPauseLink(clickPoint)) { this.pause(); return; }
+    if (this.stage.clickedMuteLink(clickPoint)) { this.mute(); return; }
+    if (this.stage.clickedFullscreenLink(clickPoint)) { this.fullscreen(); return; }
+    if (this.stage.clickedLevelCreatorLink(clickPoint)) { this.openLevelCreator(); return; }
 
     if (!this.stage.hud.replayButton && !this.outOfAmmo() && !this.shouldWaveEnd() && !this.paused) {
       sound.play('gunSound');
@@ -598,12 +474,8 @@ class Game {
   animate() {
     if (!this.paused) {
       this.renderer.render(this.stage);
-
-      if (this.shouldWaveEnd()) {
-        this.endWave();
-      }
+      if (this.shouldWaveEnd()) { this.endWave(); }
     }
-
     requestAnimationFrame(this.animate.bind(this));
   }
 }
