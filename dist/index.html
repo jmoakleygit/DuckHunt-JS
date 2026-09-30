@@ -2,21 +2,76 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <html>
 <head>
-  <title>DuckHuntJS</title>
+  <title>VAFMH Duck Hunt</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="description" content="An open source, web based, responsive implementation of Duck Hunt in canvas or webgl depending on your client.">
-  <meta name="author" content="Matt Surabian">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     body {
-      overflow:hidden;
+      overflow: hidden;
       margin: 0;
       padding: 0;
-      background-color: #000000;
+      background-color: #0A0A0F;
+    }
+    #vafmh-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid rgba(232,97,26,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 9999;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      color: #E8611A;
+      box-sizing: border-box;
+    }
+    #vafmh-exit {
+      color: rgba(232,97,26,0.7);
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: 1px solid rgba(232,97,26,0.4);
+      padding: 4px 8px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 7px;
+    }
+    #vafmh-exit:hover {
+      color: #E8611A;
+      border-color: #E8611A;
+    }
+    canvas {
+      margin-top: 36px;
     }
   </style>
   <script src="duckhunt.js"></script>
 </head>
 <body>
+  <div id="vafmh-header">
+    <span>// VAFMH DUCK HUNT</span>
+    <button id="vafmh-exit" onclick="exitGame()">// EXIT GAME</button>
+  </div>
+  <script>
+    function exitGame() {
+      window.parent.postMessage({ type: 'VAFMH_EXIT_GAME', game: 'duck-hunt' }, '*');
+    }
+
+    function reportScore(score, accuracy) {
+      window.parent.postMessage({
+        type: 'VAFMH_GAME_OVER',
+        game: 'duck-hunt',
+        score: score,
+        accuracy: accuracy
+      }, '*');
+    }
+
+    window.VAFMH = { reportScore: reportScore };
+  </script>
 </body>
 </html>
