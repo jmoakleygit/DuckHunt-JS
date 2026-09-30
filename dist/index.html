@@ -72,6 +72,23 @@
     }
 
     window.VAFMH = { reportScore: reportScore };
+
+    var patchInterval = setInterval(function() {
+      if (window.__gameInstance) {
+        clearInterval(patchInterval);
+        var inst = window.__gameInstance;
+        var orig_win = inst.win.bind(inst);
+        var orig_loss = inst.loss.bind(inst);
+        inst.win = function() {
+          orig_win();
+          reportScore(inst.score || 0, 0);
+        };
+        inst.loss = function() {
+          orig_loss();
+          reportScore(inst.score || 0, 0);
+        };
+      }
+    }, 500);
   </script>
 </body>
 </html>
